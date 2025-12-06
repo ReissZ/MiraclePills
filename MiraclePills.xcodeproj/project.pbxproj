@@ -196,7 +196,6 @@
 				TargetAttributes = {
 					0C366C1A1E2E9E8300524362 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = N3K98D8WTG;
 						ProvisioningStyle = Automatic;
 					};
 					0C366C311E2E9E8300524362 = {
@@ -218,6 +217,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -419,12 +419,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = N3K98D8WTG;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MiraclePills/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.reisszurbyk.MiraclePills;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -432,12 +432,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = N3K98D8WTG;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MiraclePills/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.reisszurbyk.MiraclePills;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -518,6 +518,7 @@
 				0C366C481E2E9E8300524362 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0C366C491E2E9E8300524362 /* Build configuration list for PBXNativeTarget "MiraclePillsTests" */ = {
 			isa = XCConfigurationList;
@@ -526,6 +527,7 @@
 				0C366C4B1E2E9E8300524362 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0C366C4C1E2E9E8300524362 /* Build configuration list for PBXNativeTarget "MiraclePillsUITests" */ = {
 			isa = XCConfigurationList;
@@ -534,6 +536,7 @@
 				0C366C4E1E2E9E8300524362 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

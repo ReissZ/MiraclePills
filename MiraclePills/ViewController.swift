@@ -9,105 +9,172 @@
 import UIKit
 
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
-    
+
+    // MARK: - Outlets
     @IBOutlet weak var successImage: UIImageView!
+
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
+
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var addressTextField: UITextField!
+
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var cityTextField: UITextField!
+
     @IBOutlet weak var stateLabel: UILabel!
-    @IBOutlet weak var statePicker: UIPickerView!
     @IBOutlet weak var statePickerButton: UIButton!
+
     @IBOutlet weak var countryLabel: UILabel!
     @IBOutlet weak var countryTextField: UITextField!
+
     @IBOutlet weak var zipCodeLabel: UILabel!
     @IBOutlet weak var zipCodeTextField: UITextField!
+
     @IBOutlet weak var buyNowButton: UIButton!
     
-    let states = ["Alaska", "Arkansas", "Alabama", "California", "Maine", "New York"]
+    // MARK: - Data
+    let states = [
+        "Alaska", "Arkansas", "Alabama",
+        "California", "Maine", "New York"
+    ]
+    
+    private var pickerContainer: UIView!
+    private var statePicker: UIPickerView!
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        successImage.isHidden = true
+
+        setupPicker()
+        setupTapToDismissKeyboard()
+        stylizeUI()
+    }
+
+    // MARK: - Picker Setup
+    private func setupPicker() {
+        pickerContainer = UIView(frame: CGRect(x: 0,
+                                               y: view.frame.height,
+                                               width: view.frame.width,
+                                               height: 250))
+        pickerContainer.backgroundColor = UIColor.white
+        pickerContainer.layer.shadowColor = UIColor.black.cgColor
+        pickerContainer.layer.shadowOpacity = 0.3
+        pickerContainer.layer.shadowOffset = CGSize(width: 0, height: -2)
+        
+        statePicker = UIPickerView(frame: CGRect(x: 0, y: 0, width: pickerContainer.frame.width, height: 200))
         statePicker.dataSource = self
         statePicker.delegate = self
+        pickerContainer.addSubview(statePicker)
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        let doneButton = UIButton(frame: CGRect(x: pickerContainer.frame.width - 80, y: 200, width: 70, height: 40))
+        doneButton.setTitle("Done", for: .normal)
+        doneButton.setTitleColor(.systemBlue, for: .normal)
+        doneButton.addTarget(self, action: #selector(donePickingState), for: .touchUpInside)
+        pickerContainer.addSubview(doneButton)
         
+        view.addSubview(pickerContainer)
+    }
+    
+    // MARK: - Styling
+    private func stylizeUI() {
+        statePickerButton.layer.cornerRadius = 8
+        buyNowButton.layer.cornerRadius = 8
+        buyNowButton.setTitleColor(.white, for: .normal)
+
+        let fields = [
+            nameTextField, addressTextField, cityTextField,
+            countryTextField, zipCodeTextField
+        ]
+        fields.forEach {
+            $0?.layer.borderWidth = 0.8
+            $0?.layer.borderColor = UIColor.lightGray.cgColor
+            $0?.layer.cornerRadius = 6
+            $0?.setLeftPaddingPoints(8)
+        }
+    }
+
+    private func setupTapToDismissKeyboard() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
-        //renameField.resignFirstResponder()
     }
-        
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+    // MARK: - Actions
     @IBAction func stateButtonPressed(_ sender: Any) {
-        
-        statePicker.isHidden = false
-        countryLabel.isHidden = true
-        countryTextField.isHidden = true
-        zipCodeLabel.isHidden = true
-        zipCodeTextField.isHidden = true
-        
+        showPicker()
     }
-    
-    @IBAction func buyNowButtonPressed(_ sender: Any) {
-        
-        nameLabel.isHidden = true
-        nameTextField.isHidden = true
-        addressLabel.isHidden = true
-        addressTextField.isHidden = true
-        cityLabel.isHidden = true
-        cityTextField.isHidden = true
-        nameLabel.isHidden = true
-        nameTextField.isHidden = true
-        addressLabel.isHidden = true
-        addressTextField.isHidden = true
-        cityLabel.isHidden = true
-        cityTextField.isHidden = true
-        statePickerButton.isHidden = true
-        countryLabel.isHidden = true
-        countryTextField.isHidden = true
-        zipCodeLabel.isHidden = true
-        stateLabel.isHidden = true
-        statePickerButton.isHidden = true
-        countryLabel.isHidden = true
-        countryTextField.isHidden = true
-        zipCodeLabel.isHidden = true
-        zipCodeTextField.isHidden = true
-        successImage.isHidden = false
-        
-    }
-    
 
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+    @IBAction func buyNowButtonPressed(_ sender: Any) {
+        hideFormAndShowSuccess()
     }
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return states.count
+    @objc private func donePickingState() {
+        let selectedRow = statePicker.selectedRow(inComponent: 0)
+        statePickerButton.setTitle(states[selectedRow], for: .normal)
+        hidePicker()
     }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return states[row]
+
+    private func showPicker() {
+        UIView.animate(withDuration: 0.3) {
+            self.pickerContainer.frame.origin.y = self.view.frame.height - self.pickerContainer.frame.height
+        }
     }
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        statePickerButton.setTitle(states[row], for: UIControlState.normal)
-        statePicker.isHidden = true
-        countryLabel.isHidden = false
-        countryTextField.isHidden = false
-        zipCodeLabel.isHidden = false
-        zipCodeTextField.isHidden = false
+
+    private func hidePicker() {
+        UIView.animate(withDuration: 0.3) {
+            self.pickerContainer.frame.origin.y = self.view.frame.height
+        }
     }
-    
-    func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+
+    private func hideFormAndShowSuccess() {
+        let allViewsToHide: [UIView] = [
+            nameLabel, nameTextField,
+            addressLabel, addressTextField,
+            cityLabel, cityTextField,
+            stateLabel, statePickerButton,
+            countryLabel, countryTextField,
+            zipCodeLabel, zipCodeTextField,
+            buyNowButton
+        ]
+
+        UIView.animate(withDuration: 0.3, animations: {
+            allViewsToHide.forEach { $0.alpha = 0 }
+        }) { _ in
+            self.successImage.isHidden = false
+            UIView.animate(withDuration: 0.25) {
+                self.successImage.alpha = 1
+            }
+        }
+    }
+
+    @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
-    
+
+    // MARK: - PickerView
+    func numberOfComponents(in pickerView: UIPickerView) -> Int { 1 }
+
+    func pickerView(_ pickerView: UIPickerView,
+                    numberOfRowsInComponent component: Int) -> Int {
+        states.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView,
+                    titleForRow row: Int,
+                    forComponent component: Int) -> String? {
+        states[row]
+    }
 }
 
+// MARK: - UITextField Padding Extension
+private extension UITextField {
+    func setLeftPaddingPoints(_ amount: CGFloat) {
+        let paddingView = UIView(
+            frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.height)
+        )
+        leftView = paddingView
+        leftViewMode = .always
+    }
+}
